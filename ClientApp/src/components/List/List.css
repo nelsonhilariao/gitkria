@@ -1,0 +1,100 @@
+.github {
+  cursor: pointer;
+  position: relative;
+}
+
+.hightlight {
+  color: rgb(219 219 219);
+  font-weight: bold;
+}
+
+.github .icons {
+  width: 22px;
+}
+
+.github .favorite {
+  filter: invert(15%) sepia(70%) saturate(3707%) hue-rotate(350deg) brightness(104%) contrast(97%);
+}
+
+.github .not-favorite {
+  filter: invert(100%) sepia(100%) saturate(7%) hue-rotate(130deg) brightness(104%) contrast(101%);
+}
+
+.favorite-btn {
+  border: none;
+  background-color: transparent;
+  width: 30px;
+  position: absolute;
+  right: 8px;
+  top: 9px;
+}
+
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: white;
+}
+
+.center {
+  text-align: center;
+}
+
+.btn {
+  color: #FFF;
+  transition: all 0.5s;
+  position: relative;
+  padding: 0px;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+}
+
+.btn:hover::before {
+  opacity: 0;
+  transform: scale(0.5, 0.5);
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: all 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transform: scale(1.2, 1.2);
+}
+
+.btn:hover::after {
+  opacity: 1;
+  transform: scale(1, 1);
+}
+
+button {
+  line-height: 25px;
+  height: 30px;
+  text-align: center;
+  width: 150px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  line-height: 1.0;
+}

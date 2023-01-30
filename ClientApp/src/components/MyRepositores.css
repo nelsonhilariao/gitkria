@@ -1,0 +1,24 @@
+.mygithub {
+  cursor: pointer;
+  position: relative;
+}
+
+.hightlight {
+  color: rgb(219 219 219);
+  font-weight: bold;
+}
+
+.mygithub .icons {
+  width: 22px;
+  position: absolute;
+  right: 8px;
+  top: 9px;
+}
+
+.mygithub .favorite {
+  filter: invert(15%) sepia(70%) saturate(3707%) hue-rotate(350deg) brightness(104%) contrast(97%);
+}
+
+.mygithub .not-favorite {
+  filter: invert(100%) sepia(100%) saturate(7%) hue-rotate(130deg) brightness(104%) contrast(101%);
+}
