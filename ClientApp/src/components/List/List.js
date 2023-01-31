@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from "axios"
 import './List.css'
 
 
@@ -26,6 +27,43 @@ const List = (data) => {
 
       e.stopPropagation();
 
+      const baseURL = "https://localhost:44422/favorites"
+      let obj = {
+        login: item.owner.login,
+        id_User_Git: item.owner.id,
+        id_Repo_Git: item.id,
+        name: item.name,
+        favorite: item.favorite,
+        avatar_url: item.owner.avatar_url,
+        description: item.description,
+        updated_at: new Date(
+          item.updated_at
+            .split(' ')[0]
+            .replace(/\//g, "-")
+            .split("-")
+            .reverse()
+            .join("-")
+        )
+      }
+
+      if (item.favorite) {
+        axios.post(baseURL, obj)
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      } else {
+        axios.delete(baseURL + `/${obj.login}`)
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+
       console.log({ item })
     }
 
@@ -42,6 +80,12 @@ const List = (data) => {
     );
   }
 
+  console.log('me ajuda dados', { data })
+  if (!data.item.owner) {
+    var login = data.item.login
+    var image = data.item.avatar_url
+  }
+
   return (
     <div className='col-md-3 github' onClick={() => openInNewTab(data.item.html_url)} >
       <div>
@@ -50,11 +94,11 @@ const List = (data) => {
       <div style={{
         "minHeight": "372px"
       }}>
-        <img src={data.item.owner.avatar_url} width="230" height="150" />
+        <img src={image ? image : data.item.owner.avatar_url} width="230" height="150" />
         <br />
         <br />
 
-        <Data title="Desenvolvedor: " item={data.item.owner.login} />
+        <Data title="Desenvolvedor: " item={login ? login : data.item.owner.login} />
         <Data title="Projeto: " item={data.item.name} />
         <Data title="Descrição: " item={data.item.description} />
         <Data title="Linguagem: " item={data.item.language} />

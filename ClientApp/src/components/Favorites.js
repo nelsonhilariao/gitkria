@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import List from './List/List';
+import "./Favorites.css"
 
 export class Favorites extends Component {
   static displayName = Favorites.name;
@@ -14,26 +16,11 @@ export class Favorites extends Component {
 
   static renderFavoriteList(favorites) {
     return (
-      <table className='table table-striped' aria-labelledby="tabelLabel">
-        <thead>
-          <tr>
-            <th>ID usuário</th>
-            <th>ID Repositório</th>
-            <th>Usuário</th>
-            <th>Repositório</th>
-          </tr>
-        </thead>
-        <tbody>
-          {favorites.map(favorite =>
-            < tr key={favorite.date} >
-              <td>{favorite.id_user_git}</td>
-              <td>{favorite.id_repo_git}</td>
-              <td>{favorite.user_name}</td>
-              <td>{favorite.repository}</td>
-            </tr>
-          )}
-        </tbody>
-      </table >
+      <div>
+        {favorites.map(favorite =>
+          <List className="col-md-12" item={favorite} key={favorite.id_Repo_Git}></List>
+        )}
+      </div>
     );
   }
 
@@ -44,6 +31,8 @@ export class Favorites extends Component {
 
     return (
       <div>
+        <di>
+        </di>
         <h1 id="tabelLabel" >Favoritos</h1>
         <p>Opss.. volte em breve esta área está sendo construida.</p>
         {contents}

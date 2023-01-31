@@ -43,10 +43,10 @@ export class Challange extends Component {
           <p>NÃO PODE: Utilizar laços de repetição, por exemplo: do-while, for, foreach e etc.</p>
         </div>
         <br></br>
-        <di>
+        <div>
           <p className='response'>Resposta:</p>
           <img src={'img/ex2.png'}></img>
-        </di>
+        </div>
       </div >
     );
   }
