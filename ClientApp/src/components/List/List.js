@@ -4,6 +4,7 @@ import './List.css'
 
 
 const List = (data) => {
+  console.log('FAVORITESLIST', { data })
 
   const [isFavorite, setIsFavorite] = useState(data.item.favorite);
 
@@ -36,6 +37,7 @@ const List = (data) => {
         favorite: item.favorite,
         avatar_url: item.owner.avatar_url,
         description: item.description,
+        html_url: item.html_url,
         updated_at: new Date(
           item.updated_at
             .split(' ')[0]
@@ -64,7 +66,6 @@ const List = (data) => {
           });
       }
 
-      console.log({ item })
     }
 
     let img;
@@ -80,12 +81,20 @@ const List = (data) => {
     );
   }
 
-  console.log('me ajuda dados', { data })
   if (!data.item.owner) {
     var login = data.item.login
     var image = data.item.avatar_url
   }
 
+  console.log(
+    '\n==========================================================================\n',
+    data.item.html_url,
+    '\n==========================================================================\n',
+    { login },
+    '\n==========================================================================\n',
+    { image },
+    '\n==========================================================================\n',
+  )
   return (
     <div className='col-md-3 github' onClick={() => openInNewTab(data.item.html_url)} >
       <div>

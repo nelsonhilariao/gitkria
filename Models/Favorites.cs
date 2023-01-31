@@ -10,6 +10,7 @@
         public bool favorite { get; set; }
         public string? avatar_url { get; set; }
         public string? description { get; set; }
+        public string? html_url { get; set; }
         public DateTime? updated_at { get; set; }
 
     }

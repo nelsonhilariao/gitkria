@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import Filter from './Filters/Filters'
 import List from './List/List'
-
 import './MyRepositores.css'
 
+const amountPerPage = 20
+const userGit = 'nelsonhilariao'
 const api = {
   gitUrl: "https://api.github.com/users/nelsonhilariao/repos",
+  gitSearchUrl: "https://api.github.com/search/repositories?",
 }
 
 const options = {
@@ -22,35 +24,92 @@ export class MyRepositories extends Component {
   constructor () {
     super()
     this.state = {
-      githubData: []
+      githubData: [],
+      loadMore: false,
+      currentPage: 1,
+      currentSearch: '',
     }
   }
 
   componentDidMount() {
+    this.getRepositories(null, null, 'componentDidMount')
+  }
+
+  getRepositories = (search, page, from) => {
+    console.log('passou getRepositories ', from)
+    console.log({ page })
+    if (!search) search = 'test'
+    if (!page) page = 1
+    console.log({ pageDepois: page })
+    const params = {
+      q: search,
+      sort: 'updated',
+      order: 'asc',
+      per_page: amountPerPage,
+      page
+    }
+    if (from === 'handleSearch' && search !== 'test') params.q += 'user:' + userGit
+    // params.q = encodeURIComponent(params.q)
+    const query = Object.entries(params)
+      .map(entry => entry.join('='))
+      .join('&')
+
+    const url = from === 'handleSearch' && search !== 'test' ? api.gitSearchUrl + query : api.gitUrl
+    console.log({ url, from })
     axios
-      .get(api.gitUrl)
+      .get(url)
       .then((res) => {
         console.log(res)
 
-        // let newItem = res.data.items.map(item => {
-        let newItem = res.data.map(item => {
+        let newItem
+        if (from === 'handleSearch' && search !== 'test') {
+          newItem = res.data.items.map(item => {
+            let date = new Date(item.updated_at)
+            item.updated_at = new Intl.DateTimeFormat('pt-BR', options).format(date)
 
-          let date = new Date(item.updated_at)
-          item.updated_at = new Intl.DateTimeFormat('pt-BR', options).format(date)
+            return item
+          })
 
-          return item
-        })
+        } else {
+          newItem = res.data.map(item => {
 
+            let date = new Date(item.updated_at)
+            item.updated_at = new Intl.DateTimeFormat('pt-BR', options).format(date)
 
-        this.setState({ githubData: newItem })
+            return item
+          })
+
+        }
+
+        this.setState({ loadMore: newItem.length !== amountPerPage ? false : true })
+        this.setState({ currentPage: page })
+        if (!page || page === 1) this.setState({ githubData: newItem })
+        else this.setState({ githubData: this.state.githubData.concat(newItem) })
       })
+  }
+
+  loadMore = () => {
+    this.getRepositories(this.state.currentSearch, this.state.currentPage + 1, 'loadMoreBtn')
+  }
+
+  LoadMoreBtn = () => {
+    let button
+    if (this.state.loadMore) button = <button className="btn" onClick={this.loadMore} >Carregar mais</button>
+
+    return (
+      <div>
+        {button}
+      </div >
+    )
   }
 
   render() {
     const { githubData } = this.state;
 
-    const handleRepos = (newRepos) => {
-      this.setState({ githubData: newRepos })
+    const handleSearch = (searchText) => {
+      console.log('passou filter')
+      this.setState({ currentSearch: searchText })
+      this.getRepositories(searchText, null, 'handleSearch')
     }
 
     return (
@@ -58,13 +117,14 @@ export class MyRepositories extends Component {
         <h1>Meus Repositórios</h1>
 
         <p> Hi, I'm Nelson. Welcome to my GitKRIA repository! 👋</p>
-        <Filter onRepos={handleRepos} items={githubData}></Filter>
+        <Filter onSearch={handleSearch}></Filter>
 
         <div className='row'>
           {githubData.map((repo) => (
             <List className="col-md-12" item={repo} key={repo.id}></List>
           ))}
         </div>
+        <this.LoadMoreBtn></this.LoadMoreBtn>
       </div >
     );
   }

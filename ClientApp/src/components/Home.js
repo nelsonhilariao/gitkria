@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import axios from 'axios'
 import Filter from './Filters/Filters'
 import List from './List/List'
+import "./Home.css"
 
+const amountPerPage = 20
 const api = {
-  gitUrl: "https://api.github.com/search/repositories?q=test&sort=stars&page=1",
+  gitUrl: "https://api.github.com/search/repositories?",
   apiUrl: "https://localhost:7088/favoritemodels/favorites"
 }
 
@@ -15,17 +17,45 @@ const options = {
   timeZone: 'America/Los_Angeles'
 }
 
+
 export class Home extends Component {
   constructor () {
     super()
     this.state = {
-      githubData: []
+      githubData: [],
+      loadMore: false,
+      currentPage: 1,
+      currentSearch: '',
     }
   }
 
+
   componentDidMount() {
+    console.log('passou componentDidMount')
+    this.getRepositories(null, null, 'componentDidMount')
+  }
+
+
+  getRepositories = (search, page, from) => {
+    console.log('passou getRepositories ', from)
+    console.log({ page })
+    if (!search) search = 'test'
+    if (!page) page = 1
+    console.log({ pageDepois: page })
+    const params = {
+      q: search,
+      sort: 'updated',
+      order: 'asc',
+      per_page: amountPerPage,
+      page
+    }
+
+    const query = Object.entries(params)
+      .map(entry => entry.join('='))
+      .join('&')
+
     axios
-      .get(api.gitUrl)
+      .get(api.gitUrl + query)
       .then((res) => {
         console.log(res)
 
@@ -37,26 +67,47 @@ export class Home extends Component {
           return item
         })
 
-
-        this.setState({ githubData: newItem })
+        this.setState({ loadMore: newItem.length !== amountPerPage ? false : true })
+        this.setState({ currentPage: page })
+        if (!page || page === 1) this.setState({ githubData: newItem })
+        else this.setState({ githubData: this.state.githubData.concat(newItem) })
       })
   }
 
-  render() {
-    const { githubData } = this.state;
+  loadMore = () => {
+    this.getRepositories(this.state.currentSearch, this.state.currentPage + 1, 'loadMoreBtn')
+  }
 
-    const handleRepos = (newRepos) => {
-      this.setState({ githubData: newRepos })
+  LoadMoreBtn = () => {
+    let button
+    if (this.state.loadMore) button = <button className="load-more" onClick={this.loadMore} >Carregar mais</button>
+
+    return (
+      <div style={{ "textAlign": "center" }}>
+        {button}
+      </div>
+    )
+  }
+
+  render() {
+    const { githubData } = this.state
+
+    const handleSearch = (searchText) => {
+      console.log('passou filter')
+      this.setState({ currentSearch: searchText })
+      this.getRepositories(searchText, null, 'handleSearch')
     }
 
     return (
       <div className='container App' >
-        <Filter onRepos={handleRepos} items={githubData}></Filter>
+        <Filter onSearch={handleSearch}></Filter>
         <div className='row'>
           {githubData.map((repo) => (
             <List className="col-md-12" item={repo} key={repo.id}></List>
           ))}
+
         </div>
+        <this.LoadMoreBtn></this.LoadMoreBtn>
       </div >
     )
   }

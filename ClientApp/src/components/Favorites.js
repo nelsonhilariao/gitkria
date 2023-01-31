@@ -5,43 +5,36 @@ import "./Favorites.css"
 export class Favorites extends Component {
   static displayName = Favorites.name;
 
-  constructor (props) {
-    super(props);
+  constructor () {
+    super();
     this.state = { favorites: [], loading: true };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.populateFavoriteData();
   }
 
-  static renderFavoriteList(favorites) {
-    return (
-      <div>
-        {favorites.map(favorite =>
-          <List className="col-md-12" item={favorite} key={favorite.id_Repo_Git}></List>
-        )}
-      </div>
-    );
-  }
-
   render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : Favorites.renderFavoriteList(this.state.favorites);
+    let favorites = this.state.favorites
 
+    console.log({ favorites })
     return (
       <div>
-        <di>
-        </di>
+        <div>
+        </div>
         <h1 id="tabelLabel" >Favoritos</h1>
         <p>Opss.. volte em breve esta área está sendo construida.</p>
-        {contents}
+        <div>
+          {favorites.map((favorite) => (
+            <List className="col-md-12" item={favorite} key={favorite.id_Repo_Git}></List>
+          ))}
+        </div>
       </div>
     );
   }
 
   async populateFavoriteData() {
-    const response = await fetch('favorites');
+    const response = await fetch('api/favorites');
     const data = await response.json();
     this.setState({ favorites: data, loading: false });
   }
