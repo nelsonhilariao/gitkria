@@ -4,8 +4,6 @@ import './List.css'
 
 
 const List = (data) => {
-  console.log('FAVORITESLIST', { data })
-
   const [isFavorite, setIsFavorite] = useState(data.item.favorite);
 
   const Data = (props) => {
@@ -81,20 +79,6 @@ const List = (data) => {
     );
   }
 
-  if (!data.item.owner) {
-    var login = data.item.login
-    var image = data.item.avatar_url
-  }
-
-  console.log(
-    '\n==========================================================================\n',
-    data.item.html_url,
-    '\n==========================================================================\n',
-    { login },
-    '\n==========================================================================\n',
-    { image },
-    '\n==========================================================================\n',
-  )
   return (
     <div className='col-md-3 github' onClick={() => openInNewTab(data.item.html_url)} >
       <div>
@@ -103,11 +87,11 @@ const List = (data) => {
       <div style={{
         "minHeight": "372px"
       }}>
-        <img src={image ? image : data.item.owner.avatar_url} width="230" height="150" />
+        <img src={data.item.owner.avatar_url} width="230" height="150" />
         <br />
         <br />
 
-        <Data title="Desenvolvedor: " item={login ? login : data.item.owner.login} />
+        <Data title="Desenvolvedor: " item={data.item.owner.login} />
         <Data title="Projeto: " item={data.item.name} />
         <Data title="Descrição: " item={data.item.description} />
         <Data title="Linguagem: " item={data.item.language} />

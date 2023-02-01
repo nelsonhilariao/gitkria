@@ -36,11 +36,8 @@ export class MyRepositories extends Component {
   }
 
   getRepositories = (search, page, from) => {
-    console.log('passou getRepositories ', from)
-    console.log({ page })
     if (!search) search = 'test'
     if (!page) page = 1
-    console.log({ pageDepois: page })
     const params = {
       q: search,
       sort: 'updated',
@@ -55,11 +52,9 @@ export class MyRepositories extends Component {
       .join('&')
 
     const url = from === 'handleSearch' && search !== 'test' ? api.gitSearchUrl + query : api.gitUrl
-    console.log({ url, from })
     axios
       .get(url)
       .then((res) => {
-        console.log(res)
 
         let newItem
         if (from === 'handleSearch' && search !== 'test') {
@@ -107,7 +102,6 @@ export class MyRepositories extends Component {
     const { githubData } = this.state;
 
     const handleSearch = (searchText) => {
-      console.log('passou filter')
       this.setState({ currentSearch: searchText })
       this.getRepositories(searchText, null, 'handleSearch')
     }

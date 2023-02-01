@@ -31,7 +31,7 @@ const Filter = (props) => {
         />
         <button onClick={cleanSearch}>x</button>
       </div>
-      <button onClick={handleSearch}>Filtrar</button>
+      <button onClick={handleSearch}>Buscar</button>
     </div>
   );
 };

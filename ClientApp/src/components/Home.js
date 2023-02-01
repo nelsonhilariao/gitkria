@@ -31,17 +31,13 @@ export class Home extends Component {
 
 
   componentDidMount() {
-    console.log('passou componentDidMount')
     this.getRepositories(null, null, 'componentDidMount')
   }
 
 
   getRepositories = (search, page, from) => {
-    console.log('passou getRepositories ', from)
-    console.log({ page })
     if (!search) search = 'test'
     if (!page) page = 1
-    console.log({ pageDepois: page })
     const params = {
       q: search,
       sort: 'updated',
@@ -57,7 +53,6 @@ export class Home extends Component {
     axios
       .get(api.gitUrl + query)
       .then((res) => {
-        console.log(res)
 
         let newItem = res.data.items.map(item => {
 
@@ -93,7 +88,6 @@ export class Home extends Component {
     const { githubData } = this.state
 
     const handleSearch = (searchText) => {
-      console.log('passou filter')
       this.setState({ currentSearch: searchText })
       this.getRepositories(searchText, null, 'handleSearch')
     }

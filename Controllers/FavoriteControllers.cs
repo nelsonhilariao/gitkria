@@ -13,7 +13,7 @@ namespace gitkria.Controllers
   public class FavoriteControllers : ControllerBase
     {
         [HttpGet]
-        [Route(template: "/api/favorites")]
+        [Route(template: "/favorites")]
         public IActionResult GetFiles()
         {
             List<Favorites> favorites = new List<Favorites>();

@@ -13,7 +13,7 @@ const AppRoutes = [
     element: <MyRepositories />
   },
   {
-    path: '/favorites',
+    path: '/favorites-list',
     element: <Favorites />
   },
   {

@@ -17,14 +17,12 @@ export class Favorites extends Component {
   render() {
     let favorites = this.state.favorites
 
-    console.log({ favorites })
     return (
       <div>
         <div>
         </div>
         <h1 id="tabelLabel" >Favoritos</h1>
-        <p>Opss.. volte em breve esta área está sendo construida.</p>
-        <div>
+        <div className='row'>
           {favorites.map((favorite) => (
             <List className="col-md-12" item={favorite} key={favorite.id_Repo_Git}></List>
           ))}
@@ -34,8 +32,24 @@ export class Favorites extends Component {
   }
 
   async populateFavoriteData() {
-    const response = await fetch('api/favorites');
-    const data = await response.json();
+    const response = await fetch('favorites');
+    let data = await response.json();
+    data = data.map(item => {
+      let obj = {
+        id_Repo_Git: item.id,
+        name: item.name,
+        favorite: item.favorite,
+        description: item.description,
+        html_url: item.html_url,
+        updated_at: item.updated_at,
+        owner: {
+          login: item.login,
+          id: item.id,
+          avatar_url: item.avatar_url
+        },
+      }
+      return obj
+    })
     this.setState({ favorites: data, loading: false });
   }
 }
